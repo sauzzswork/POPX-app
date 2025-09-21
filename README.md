@@ -27,9 +27,4 @@ This project is a front-end clone of the PopX application interface, built as a 
 | HTML5          | Application structure                        |
 | Google Fonts   | "Inter" font for modern typography           |
 
----
 
-
----
-
-## 📁 File Structure
