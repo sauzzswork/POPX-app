@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopX App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX transpilation in the browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-200">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Main App Component: Manages page navigation and state.
+        const App = () => {
+            const [page, setPage] = useState('landing'); // Can be 'landing', 'login', 'signup', or 'profile'
+
+            const navigateTo = (pageName) => {
+                setPage(pageName);
+            };
+
+            // Simple router to render the correct page based on state.
+            const renderPage = () => {
+                switch (page) {
+                    case 'login':
+                        return <SignInPage navigateTo={navigateTo} />;
+                    case 'signup':
+                        return <CreateAccountPage navigateTo={navigateTo} />;
+                    case 'profile':
+                        return <AccountSettingsPage navigateTo={navigateTo} />;
+                    case 'landing':
+                    default:
+                        return <LandingPage navigateTo={navigateTo} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center">
+                    <div className="w-full max-w-sm h-[95vh] max-h-[800px] bg-white rounded-2xl shadow-lg overflow-y-auto">
+                        {renderPage()}
+                    </div>
+                </div>
+            );
+        };
+
+        // Landing Page Component: The initial entry point for users.
+        const LandingPage = ({ navigateTo }) => {
+            return (
+                <div className="flex flex-col h-full justify-end p-8 bg-gray-50">
+                    <div className="flex-grow flex items-center justify-center relative">
+                        {/* A decorative element representing progress or community */}
+                        <div className="relative w-48 h-48">
+                            {[...Array(6)].map((_, i) => (
+                                <div key={i} className="absolute w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold" style={{
+                                    transform: `rotate(${i * 50}deg) translate(80px) rotate(-${i * 50}deg)`
+                                }}>
+                                    {i + 1}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="text-left">
+                        <h1 className="text-3xl font-bold text-gray-800">Start Your PopX Journey</h1>
+                        <p className="text-gray-500 mt-2 mb-6">Join a vibrant community of creators and influencers. PopX is where your content finds its audience.</p>
+                        <button
+                            onClick={() => navigateTo('signup')}
+                            className="w-full bg-teal-600 text-white py-3 rounded-md font-semibold hover:bg-teal-700 transition duration-300"
+                        >
+                            Create Account
+                        </button>
+                        <button
+                            onClick={() => navigateTo('login')}
+                            className="w-full bg-teal-100 text-teal-800 py-3 rounded-md mt-3 font-semibold hover:bg-teal-200 transition duration-300"
+                        >
+                            Already Registered? Login
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // Sign In Page Component: For existing users to log in.
+        const SignInPage = ({ navigateTo }) => {
+            return (
+                <div className="p-8 h-full flex flex-col justify-center bg-gray-50">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-800">Welcome Back!</h1>
+                        <p className="text-gray-500 mt-2 mb-8">Let's get you back into your creative dashboard.</p>
+
+                        <div className="relative mb-6">
+                            <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Email Address</label>
+                            <input
+                                type="email"
+                                placeholder="Enter your email"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            />
+                        </div>
+
+                        <div className="relative mb-8">
+                            <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Password</label>
+                            <input
+                                type="password"
+                                placeholder="Enter your password"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            />
+                        </div>
+
+                        <button
+                            onClick={() => navigateTo('profile')}
+                            className="w-full bg-gray-300 text-white py-3 rounded-md font-semibold hover:bg-gray-400 transition duration-300"
+                        >
+                            Login
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // Create Account Page Component: For new user registration.
+        const CreateAccountPage = ({ navigateTo }) => {
+            return (
+                <div className="p-8 h-full flex flex-col justify-between bg-gray-50">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-800">Join the PopX Community</h1>
+
+                        <div className="space-y-5 mt-8">
+                            <div className="relative">
+                                <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Full Name<span className="text-red-500">*</span></label>
+                                <input type="text" placeholder="Alex Chen" className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                            </div>
+                            <div className="relative">
+                                <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Phone Number<span className="text-red-500">*</span></label>
+                                <input type="tel" placeholder="e.g., 9876543210" className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                            </div>
+                            <div className="relative">
+                                <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Email Address<span className="text-red-500">*</span></label>
+                                <input type="email" placeholder="alex.chen@example.com" className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                            </div>
+                            <div className="relative">
+                                <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Password<span className="text-red-500">*</span></label>
+                                <input type="password" placeholder="Choose a strong password" className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                            </div>
+                            <div className="relative">
+                                <label className="absolute -top-3 left-3 bg-gray-50 px-1 text-teal-600 text-xs font-semibold">Company Name</label>
+                                <input type="text" placeholder="e.g., ACME Creations" className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                            </div>
+                        </div>
+
+                        <div className="mt-6">
+                            <p className="text-sm font-semibold text-gray-700">Are you an Agency?<span className="text-red-500">*</span></p>
+                            <div className="flex items-center space-x-6 mt-2">
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="agency" className="form-radio text-teal-600 h-5 w-5" />
+                                    <span className="text-gray-600">Yes</span>
+                                </label>
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="agency" className="form-radio text-teal-600 h-5 w-5" />
+                                    <span className="text-gray-600">No</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => navigateTo('profile')}
+                        className="w-full bg-teal-600 text-white py-3 rounded-md font-semibold hover:bg-teal-700 transition duration-300 mt-8"
+                    >
+                        Create Account
+                    </button>
+                </div>
+            );
+        };
+
+        // Account Settings Page Component: Where users can view their profile.
+        const AccountSettingsPage = ({ navigateTo }) => {
+            return (
+                <div className="bg-gray-50 min-h-full">
+                    <div className="p-4 border-b">
+                        <h1 className="text-xl font-semibold text-gray-800">Account Settings</h1>
+                    </div>
+                    <div className="p-6">
+                        <div className="flex items-center space-x-4">
+                            <div className="relative">
+                                <img
+                                    className="w-20 h-20 rounded-full object-cover"
+                                    src="https://placehold.co/100x100/EFEFEF/3B3B3B?text=AC"
+                                    alt="Alex Chen"
+                                />
+                                <div className="absolute bottom-0 right-0 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center border-2 border-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 className="font-bold text-lg text-gray-800">Alex Chen</h2>
+                                <p className="text-gray-500 text-sm">alex.chen@example.com</p>
+                            </div>
+                        </div>
+                        <p className="text-gray-600 mt-6 leading-relaxed">
+                            This is your creative space! Share a bit about your journey, your passions, and what drives you. This bio helps others in the community connect with your work on a deeper level.
+                        </p>
+
+                        <div className="border-t border-dashed my-8"></div>
+                        
+                        <button
+                            onClick={() => navigateTo('landing')}
+                            className="w-full bg-red-500 text-white py-2 rounded-md font-semibold hover:bg-red-600 transition duration-300 mt-4 mb-8"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+
+    </script>
+</body>
+</html>
+
